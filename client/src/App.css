@@ -6,6 +6,10 @@
   font-family: 'Press Start 2P', cursive;
 }
 
+.btn-text {
+  font-family: 'Play', sans-serif;
+}
+
 .img-header {
   width: 700px;
   height: 400px;

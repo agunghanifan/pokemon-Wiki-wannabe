@@ -60,8 +60,8 @@ class App extends React.Component {
               return <CardPokemon pokemon={pokemon} key={pokemon.name}></CardPokemon>
             })
           }
-          <div>
-            <button className="btn btn-warning mt-5" onClick={(event) => this.shuffleData(event)}>Lets Shuffle this boxes</button>
+          <div className="justify-content-center d-flex">
+            <button className="btn btn-warning mt-5 btn-text" onClick={(event) => this.shuffleData(event)}>Lets Shuffle this boxes</button>
           </div>
         </div>
       </div>

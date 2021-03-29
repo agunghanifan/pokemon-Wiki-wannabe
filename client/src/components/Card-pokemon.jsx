@@ -55,11 +55,13 @@ class CardPokemon extends React.Component {
     }
     return (
       <>
-        <Card className="card col-2 m-2 border-0 shadow" style={cardWidth}>
-          <CardImg className="w-100 hover-shadow" top width="100%" src={this.state.pokemons_img} alt="Card image cap" style={cardImage} />
+        <Card className="bg-image hover-zoom card col-2 m-2 border-0 shadow" style={cardWidth}>
+          <CardImg className="w-100" top width="100%" src={this.state.pokemons_img} alt="Card image cap" style={cardImage} />
           <CardBody>
             <CardTitle tag="h5">{pokemon.name}</CardTitle>
-            <Button onClick={(event) => this.changesPage(event)}>More info?</Button>
+            <div>
+              <Button className="btn-text" onClick={(event) => this.changesPage(event)}>Details..</Button>
+            </div>
           </CardBody>
         </Card>
       </>
