@@ -8,15 +8,29 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pokemons: []
+      pokemons: [],
+      fetchLink: 'https://pokeapi.co/api/v2/pokemon/'
     }
   }
 
+  shuffleData(event) {
+    event.preventDefault()
+    let startById = Math.round(Math.random() * 878)
+    this.setState({
+      ...this.state,
+      fetchLink: `https://pokeapi.co/api/v2/pokemon/?offset=${startById}&limit=20`,
+    })
+    let timing = setInterval(() => {
+      this.getDataFromServer()
+      clearInterval(timing)
+    }, 300);
+  }
+
   getDataFromServer() {
-    fetch('https://pokeapi.co/api/v2/pokemon/')
+    fetch(this.state.fetchLink)
       .then(res => res.json())
       .then(res => {
-        console.log(res.results);
+        // console.log(res.results);
         this.setState({
           ...this.state,
           pokemons: res.results
@@ -33,17 +47,23 @@ class App extends React.Component {
 
   render () {
     const { pokemons } = this.state
+    const cardDivWidth = {
+      width: '100%'
+    }
     return (
-      <div>
-        <h1>Hello WOrlds</h1>
-        <ol>
+      <div className="container">
+        <h1 className="text-center ml-5 header-font" >Worlds of<img className="img-header" src="pngaaa.com-14402(1).png" alt='pokemon'></img></h1>
+        <div className="mt-3 mb-5 row mx-auto d-flex justify-content-center" style={cardDivWidth}>
           {
             pokemons.map((pokemon) => {
               // return <li>{pokemon.name} - {pokemon.url}</li>
               return <CardPokemon pokemon={pokemon} key={pokemon.name}></CardPokemon>
             })
           }
-        </ol>
+          <div>
+            <button className="btn btn-warning mt-5" onClick={(event) => this.shuffleData(event)}>Lets Shuffle this boxes</button>
+          </div>
+        </div>
       </div>
     )
       

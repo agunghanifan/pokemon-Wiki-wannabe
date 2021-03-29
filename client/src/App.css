@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+.container .header-font {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.img-header {
+  width: 700px;
+  height: 400px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -36,3 +45,4 @@
     transform: rotate(360deg);
   }
 }
+
