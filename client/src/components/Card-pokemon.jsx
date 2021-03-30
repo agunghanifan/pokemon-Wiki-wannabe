@@ -5,9 +5,10 @@ import {
 } from 'reactstrap';
 import './Card-pokemon.css'
 import useFetchImage from '../helpers/hooks/useFetchImage'
+var Spinner = require('react-spinkit');
+
 
 function CardPokemon (props) {
-  // const [ pokemonsImg, setPokemonsImg ] = useState('')
   const { pokemonsImg, loading, error } = useFetchImage(props.pokemon.url)
   const { pokemon } = props
   const cardImage = {
@@ -18,22 +19,35 @@ function CardPokemon (props) {
     width: '18rem',
   }
 
-  if (loading) {
-    return <h1>Loading...</h1>
-  }
-
   if(error) {
     return <h1>We find some errors, here: {error}</h1>
+  }
+
+  function loadingPict () {
+    if (loading) {
+      return <div className="d-flex justify-content-center"><Spinner name="circle" /></div>
+    } else {
+      return <CardImg effect="blur" top width="100%" src={pokemonsImg} alt={pokemon.name} style={cardImage} />
+    }
+  }
+
+  function addToFavorites() {
+
+  }
+
+  function changesPage() {
+
   }
 
   return (
     <>
       <Card className="bg-image hover-zoom card col-2 m-2 border-0 shadow" style={cardWidth}>
-        <CardImg className="w-100" top width="100%" src={pokemonsImg} alt="Card image cap" style={cardImage} />
+        {loadingPict()}
+        <div className="heart" onClick={(event) => addToFavorites(event, pokemon.name)}></div>
         <CardBody>
-          <CardTitle tag="h5">{pokemon.name}</CardTitle>
+          <CardTitle tag="h5" className="text-title">{pokemon.name}</CardTitle>
           <div>
-            <Button className="btn-text" onClick={(event) => this.changesPage(event)}>Details..</Button>
+            <Button className="btn-text" onClick={(event) => changesPage(event, pokemon.url)}>Details..</Button>
           </div>
         </CardBody>
       </Card>
