@@ -12,9 +12,6 @@ function App () {
     width: '100%'
   }
 
-  if (loading) {
-    return <h1>Loading...</h1>
-  }
   if(error) {
     return <h1>We find some errors, here: {error}</h1>
   }
@@ -24,6 +21,7 @@ function App () {
       <h1 className="text-center ml-5 header-font" >Worlds of<img className="img-header" src="pngaaa.com-14402(1).png" alt='pokemon'></img></h1>
       <div className="mt-3 mb-5 row mx-auto d-flex justify-content-center" style={cardDivWidth}>
         {
+          loading ? <h1>Loading...</h1> :
           pokemons.map((pokemon) => {
             return <CardPokemon pokemon={pokemon} key={pokemon.name}></CardPokemon>
           })
