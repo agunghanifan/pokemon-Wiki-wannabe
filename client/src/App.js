@@ -1,35 +1,23 @@
 // import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React from 'react'
 import CardPokemon from './components/Card-pokemon'
+import useFetchData from './helpers/hooks/useFetchData'
 
 
 function App () {
-  const [pokemons, setPokemons] = useState([])
-  const [fetchLink, setFetchLink] = useState('https://pokeapi.co/api/v2/pokemon/')
+  const { loading, pokemons, error, shuffleData } = useFetchData('https://pokeapi.co/api/v2/pokemon/')
+  console.log(pokemons)
   const cardDivWidth = {
     width: '100%'
   }
 
-  function shuffleData (e) {
-    e.preventDefault()
-    let startById = Math.round(Math.random() * 878)
-    setFetchLink(`https://pokeapi.co/api/v2/pokemon/?offset=${startById}&limit=20`)
+  if (loading) {
+    return <h1>Loading...</h1>
   }
-
-  useEffect(() => {
-    console.log('masuk effect')
-    fetch(fetchLink)
-      .then(res => res.json())
-      .then(pokemonsData => {
-        console.log(pokemonsData)
-        setPokemons(pokemonsData.results)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [fetchLink, setPokemons])
-
+  if(error) {
+    return <h1>We find some errors, here: {error}</h1>
+  }
 
   return (
     <div className="container">

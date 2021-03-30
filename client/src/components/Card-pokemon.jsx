@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'
 import {
-  Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button
+  Card, CardImg, CardBody,
+  CardTitle, Button
 } from 'reactstrap';
 import './Card-pokemon.css'
-
+import useFetchImage from '../helpers/hooks/useFetchImage'
 
 function CardPokemon (props) {
-  const [ pokemonsImg, setPokemonsImg ] = useState('')
+  // const [ pokemonsImg, setPokemonsImg ] = useState('')
+  const { pokemonsImg, loading, error } = useFetchImage(props.pokemon.url)
   const { pokemon } = props
   const cardImage = {
     width: '150px',
@@ -17,13 +18,13 @@ function CardPokemon (props) {
     width: '18rem',
   }
 
-  useEffect(() => {
-    fetch(pokemon.url)
-      .then(res => res.json())
-      .then(pokemonData => {
-        setPokemonsImg(pokemonData.sprites.other['official-artwork'].front_default)
-      })
-  }, [pokemon, setPokemonsImg])
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
+
+  if(error) {
+    return <h1>We find some errors, here: {error}</h1>
+  }
 
   return (
     <>
