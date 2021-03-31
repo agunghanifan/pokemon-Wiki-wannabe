@@ -3,6 +3,7 @@ const initialState = {
   favorites: [],
   pokemons: [],
   fetchLink: 'https://pokeapi.co/api/v2/pokemon',
+  details: {}
 }
 
 function reducer(state = initialState, action) {
@@ -17,6 +18,8 @@ function reducer(state = initialState, action) {
     return { ...state,
     favorites: state.favorites.filter((favorite) => favorite.id !== payload)
     }
+  } else if (type === 'details/setDetails') {
+    return { ...state, details: payload}
   }
   return state
 }

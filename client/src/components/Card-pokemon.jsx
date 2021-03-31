@@ -71,7 +71,6 @@ function CardPokemon (props) {
 
   function changesPage(e, id) {
     e.preventDefault()
-    console.log(id)
     history.push(`/details/${id}`)
   }
 

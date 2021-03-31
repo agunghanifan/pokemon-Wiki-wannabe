@@ -10,3 +10,6 @@ export function setPokemons(payload) {
 export function deleteFavorite(payload) {
     return { type: "favorites/deleteFavorite", payload }
 }
+export function setDetails(payload) {
+    return { type: "details/setDetails", payload }
+}
