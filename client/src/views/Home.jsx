@@ -1,15 +1,42 @@
 import './Home.css';
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import CardPokemon from '../components/Card-pokemon'
-import useFetchData from '../helpers/hooks/useFetchData'
 import Navbar from '../components/Navbar'
+import { useSelector, useDispatch } from 'react-redux'
+import { setFetchLink, setPokemons } from '../store/action'
 var Spinner = require('react-spinkit');
 
 function Home () {
-  const { loading, pokemons, error, shuffleData } = useFetchData('https://pokeapi.co/api/v2/pokemon/')
+  const fetchLink = useSelector(state => state.fetchLink)
+  const pokemons = useSelector(state => state.pokemons)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const dispatch = useDispatch()
   const cardDivWidth = {
     width: '100%'
   }
+
+  function shuffleData (e) {
+    e.preventDefault()
+    let startById = Math.round(Math.random() * 878)
+    dispatch(setFetchLink(`https://pokeapi.co/api/v2/pokemon/?offset=${startById}&limit=20`))
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    fetch(fetchLink)
+      .then(res => res.json())
+      .then(pokemonsData => {
+        dispatch(setPokemons(pokemonsData.results))
+      })
+      .catch(err => {
+        console.log(err)
+        setError(err)
+      })
+      .finally(_ => {
+        setLoading(false)
+      })
+  }, [fetchLink, dispatch])
 
   if(error) {
     return <h1>We find some errors, here: {error}</h1>

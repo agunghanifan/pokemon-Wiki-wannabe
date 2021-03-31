@@ -1,18 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Card, CardImg, CardBody,
   CardTitle, Button
 } from 'reactstrap';
 import './Card-pokemon.css'
-import useFetchImage from '../helpers/hooks/useFetchImage'
 import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToFavorites } from '../store/action'
 var Spinner = require('react-spinkit');
 
 
 function CardPokemon (props) {
   const history = useHistory()
-  const { pokemonsImg, loading, error, pokemonId } = useFetchImage(props.pokemon.url)
+  const dispatch = useDispatch()
+  const favorites = useSelector(state => state.favorites)
   const { pokemon } = props
+  const [ pokemonImg, setPokemonImg ] = useState('')
+  const [ pokemonId, setPokemonId ] = useState()
+  const [ loading, setLoading ] = useState(false)
+  const [ error, setError ] = useState(null)
+
+  useEffect(() => {
+    setLoading(true)
+    fetch(pokemon.url)
+      .then(res => res.json())
+      .then(pokemonData => {
+        setPokemonImg(pokemonData.sprites.other['official-artwork'].front_default)
+        setPokemonId(pokemonData.id)
+      })
+      .catch(err => {
+        console.log(err)
+        setError(err)
+      })
+      .finally(_ => {
+        setLoading(false)
+      })
+  }, [pokemon.url])
+
   const cardImage = {
     width: '150px',
     height: '150px',
@@ -29,12 +53,20 @@ function CardPokemon (props) {
     if (loading) {
       return <div className="d-flex justify-content-center"><Spinner name="circle" /></div>
     } else {
-      return <CardImg effect="blur" top width="100%" src={pokemonsImg} alt={pokemon.name} style={cardImage} />
+      return <CardImg effect="blur" top width="100%" src={pokemonImg} alt={pokemon.name} style={cardImage} />
     }
   }
 
-  function addToFavorites() {
-
+  function addFavorites(e, payload) {
+    e.preventDefault()
+    let flag = true
+    favorites.forEach(favorite => {
+      if (favorite.id === payload.id) {
+        flag = false
+        history.push('/')
+      }
+    })
+    if (flag) dispatch(addToFavorites(payload))
   }
 
   function changesPage(e, id) {
@@ -47,7 +79,7 @@ function CardPokemon (props) {
     <>
       <Card className="bg-image hover-zoom card col-2 m-2 border-0 shadow" style={cardWidth}>
         {loadingPict()}
-        <div className="heart" onClick={(event) => addToFavorites(event, pokemon.name)}></div>
+        <div className="heart" onClick={(event) => addFavorites(event, { pokemonImg: pokemonImg, pokemonName: pokemon.name, id: pokemonId})}></div>
         <CardBody>
           <CardTitle tag="h5" className="text-title">{pokemon.name}</CardTitle>
           <div>
