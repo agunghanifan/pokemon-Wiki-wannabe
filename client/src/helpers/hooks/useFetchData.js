@@ -13,12 +13,10 @@ const useFetchData = (url) => {
   }
 
   useEffect(() => {
-    console.log('masuk effect')
     setLoading(true)
     fetch(fetchLink)
       .then(res => res.json())
       .then(pokemonsData => {
-        console.log(pokemonsData)
         setPokemons(pokemonsData.results)
       })
       .catch(err => {

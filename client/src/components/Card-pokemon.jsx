@@ -5,11 +5,13 @@ import {
 } from 'reactstrap';
 import './Card-pokemon.css'
 import useFetchImage from '../helpers/hooks/useFetchImage'
+import { useHistory } from 'react-router-dom'
 var Spinner = require('react-spinkit');
 
 
 function CardPokemon (props) {
-  const { pokemonsImg, loading, error } = useFetchImage(props.pokemon.url)
+  const history = useHistory()
+  const { pokemonsImg, loading, error, pokemonId } = useFetchImage(props.pokemon.url)
   const { pokemon } = props
   const cardImage = {
     width: '150px',
@@ -35,8 +37,10 @@ function CardPokemon (props) {
 
   }
 
-  function changesPage() {
-
+  function changesPage(e, id) {
+    e.preventDefault()
+    console.log(id)
+    history.push(`/details/${id}`)
   }
 
   return (
@@ -47,7 +51,7 @@ function CardPokemon (props) {
         <CardBody>
           <CardTitle tag="h5" className="text-title">{pokemon.name}</CardTitle>
           <div>
-            <Button className="btn-text" onClick={(event) => changesPage(event, pokemon.url)}>Details..</Button>
+            <Button className="btn-text" onClick={(event) => changesPage(event, pokemonId)}>Details..</Button>
           </div>
         </CardBody>
       </Card>

@@ -1,16 +1,31 @@
-import React from 'react';
+import React from 'react'
+import useFetchDetails from '../helpers/hooks/useFetchDetails'
+import { useParams } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+var Spinner = require('react-spinkit');
 
-
-class DetailsPage extends React.Component {
-  constructor(props) {
-    super(props);
+export default function DetailsPage() {
+  const { id } = useParams()
+  const { details, loading, error } = useFetchDetails(id)
+  
+  function loadingDetails () {
+    if (loading) {
+      return <div className="d-flex justify-content-center"><Spinner className="mt-5" name="ball-spin-fade-loader" /></div>
+    }
   }
 
-  render() {
-    return (
-      <h1>Hello Details</h1>
-    )
+  function foundError () {
+    if (error) {
+      return <div><h1>Here's error {error}</h1></div>
+    }
   }
+  return (
+    <div>
+      <Navbar />
+      <h1 className="text-center">Hello ini Details</h1>
+      {loadingDetails()}
+      {details}
+      {foundError()}
+    </div>
+  )
 }
-
-export default DetailsPage

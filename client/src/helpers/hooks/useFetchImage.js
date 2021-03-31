@@ -4,6 +4,7 @@ const useFetchImage = (url) => {
   const [ pokemonsImg, setPokemonsImg ] = useState('')
   const [ loading, setLoading ] = useState(false)
   const [ error, setError ] = useState(null)
+  const [ pokemonId, setPokemonId ] = useState()
 
   useEffect(() => {
     setLoading(true)
@@ -11,6 +12,7 @@ const useFetchImage = (url) => {
       .then(res => res.json())
       .then(pokemonData => {
         setPokemonsImg(pokemonData.sprites.other['official-artwork'].front_default)
+        setPokemonId(pokemonData.id)
       })
       .catch(err => {
         console.log(err)
@@ -24,7 +26,8 @@ const useFetchImage = (url) => {
   return {
     pokemonsImg,
     loading,
-    error
+    error,
+    pokemonId
   }
 }
 
