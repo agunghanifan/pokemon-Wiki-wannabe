@@ -1,0 +1,28 @@
+.text-title {
+    font-family: 'Play', sans-serif;
+}
+  
+.text-title:hover {
+    text-align: center;
+}
+  
+.btn-text {
+    font-family: 'Play', sans-serif;
+}
+  
+.heart-black {
+    background-image: url("https://lh3.googleusercontent.com/proxy/MVb3LZaDuwdy1U5GbHdFRKj25LWOhrLnSPpw42IkzK0_oBls3lXrLynwvpXv5Rq0EINsx14bYn6Wl8YXA_vgiKaoniYsEfquCHj3M2gc75LxHpNeRXYmIsWbcu7b9p4oajNsvKUV-ShK239OLuS8p68L7XSCKJ7go9w361kxJFFaxX1-sg8K");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    position: relative;
+    height: 20px;
+    width: 20px;
+    bottom: 145px;
+    left: 145px;
+}
+  
+.heart-black:hover {
+    transform: translateZ(10px);
+    cursor: pointer;
+}
