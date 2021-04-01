@@ -7,7 +7,7 @@ var Spinner = require('react-spinkit');
 
 
 export default function Favorites() {
-  let favorites = useSelector(state => state.favorites)
+  let favorites = useSelector(state => state.favoritesReducer.favorites)
   const [ loading, setLoading ] = useState(false)
   const cardDivWidth = {
     width: '100%'

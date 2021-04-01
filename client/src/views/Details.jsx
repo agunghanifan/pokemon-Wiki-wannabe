@@ -1,33 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { setDetails } from '../store/action'
+import { fetchDetailsAsync, setLoadingDetails } from '../store/actions/pokemonsAction'
 import Navbar from '../components/Navbar'
 import { Card, CardTitle, CardText, Row, Col } from 'reactstrap';
 import './Details.css'
 var Spinner = require('react-spinkit');
 
 export default function DetailsPage() {
-  const details = useSelector(state => state.details)
-  const [ loading, setLoading ] = useState(true)
-  const [ error, setError ] = useState(null)
-  const { id } = useParams()
+  const details = useSelector(state => state.pokemonsReducer.details)
+  const error = useSelector(state => state.pokemonsReducer.error)
+  const loadingDetails = useSelector(state => state.pokemonsReducer.loadingDetails)
+  const { idPokemon } = useParams()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((res) => res.json())
-      .then((details) => {
-        dispatch(setDetails(details))
-      })
-      .catch((error) => setError(error))
-      .finally((_) => setLoading(false))
-  }, [id, dispatch])
+    console.log("masuk useEffect")
+    dispatch(setLoadingDetails(true))
+    dispatch(fetchDetailsAsync(idPokemon))
+  }, [idPokemon, dispatch])
 
   function foundError () {
     if (error) {
-      return <div><h1>Here's error {error}</h1></div>
+      return <div><h1>Here's error {JSON.stringify(error)}</h1></div>
     }
+  }
+
+  if (loadingDetails) {
+    return (
+      <div>
+        <div>
+          <Navbar></Navbar>
+        </div>
+        <div className="d-flex justify-content-center"><Spinner name="ball-spin-fade-loader" /></div>
+      </div>
+    )
   }
 
   return (
@@ -37,7 +44,6 @@ export default function DetailsPage() {
       </div>
       {foundError()}
       {
-        loading ? <div className="d-flex justify-content-center"><Spinner name="ball-spin-fade-loader" /></div> :
         <div className="container">
           <h1 className="text-center mt-5 mb-3">{details.forms[0].name}</h1>
           <div>

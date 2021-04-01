@@ -1,16 +1,16 @@
 import './Home.css';
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import CardPokemon from '../components/Card-pokemon'
 import Navbar from '../components/Navbar'
 import { useSelector, useDispatch } from 'react-redux'
-import { setFetchLink, setPokemons } from '../store/action'
+import { setLoading, fetchPokemonsAsync, shuffleDatas } from '../store/actions/pokemonsAction'
 var Spinner = require('react-spinkit');
 
 function Home () {
-  const fetchLink = useSelector(state => state.fetchLink)
-  const pokemons = useSelector(state => state.pokemons)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const fetchLink = useSelector(state => state.pokemonsReducer.fetchLink)
+  const pokemons = useSelector(state => state.pokemonsReducer.pokemons)
+  const loading = useSelector(state => state.pokemonsReducer.loading)
+  const error = useSelector(state => state.pokemonsReducer.error)
   const dispatch = useDispatch()
   const cardDivWidth = {
     width: '100%'
@@ -18,24 +18,12 @@ function Home () {
 
   function shuffleData (e) {
     e.preventDefault()
-    let startById = Math.round(Math.random() * 878)
-    dispatch(setFetchLink(`https://pokeapi.co/api/v2/pokemon/?offset=${startById}&limit=20`))
+    dispatch(shuffleDatas())
   }
 
   useEffect(() => {
-    setLoading(true)
-    fetch(fetchLink)
-      .then(res => res.json())
-      .then(pokemonsData => {
-        dispatch(setPokemons(pokemonsData.results))
-      })
-      .catch(err => {
-        console.log(err)
-        setError(err)
-      })
-      .finally(_ => {
-        setLoading(false)
-      })
+    dispatch(setLoading(true))
+    dispatch(fetchPokemonsAsync())
   }, [fetchLink, dispatch])
 
   if(error) {
@@ -52,12 +40,12 @@ function Home () {
         <div className="mt-3 mb-5 row mx-auto d-flex justify-content-center" style={cardDivWidth}>
           {
             loading ? <div className="d-flex justify-content-center"><Spinner name="ball-spin-fade-loader" /></div> :
-            pokemons.map((pokemon) => {
-              return <CardPokemon pokemon={pokemon} key={pokemon.name}></CardPokemon>
+            pokemons.map((pokemon, index) => {
+              return <CardPokemon pokemon={pokemon} index={index} key={index}></CardPokemon>
             })
           }
           <div className="justify-content-center d-flex">
-            <button className="btn btn-warning mt-5 btn-text" onClick={(e) => shuffleData(e)}>Lets Shuffle this boxes</button>
+            <button className="btn btn-warning mt-5 btn-text btn-shake" onClick={(e) => shuffleData(e)}>Lets Shuffle this boxes</button>
           </div>
         </div>
       </div>

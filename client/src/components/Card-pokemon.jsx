@@ -6,36 +6,38 @@ import {
 import './Card-pokemon.css'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToFavorites } from '../store/action'
+import { setLoadingCards, setError } from '../store/actions/pokemonsAction'
+import { addToFavorites } from '../store/actions/favoritesAction'
 var Spinner = require('react-spinkit');
 
 
 function CardPokemon (props) {
   const history = useHistory()
   const dispatch = useDispatch()
-  const favorites = useSelector(state => state.favorites)
-  const { pokemon } = props
+  const favorites = useSelector(state => state.favoritesReducer.favorites)
+  const loading = useSelector(state => state.pokemonsReducer.loadingCards)
+  const error = useSelector(state => state.pokemonsReducer.error)
+  const { pokemon, index } = props
   const [ pokemonImg, setPokemonImg ] = useState('')
   const [ pokemonId, setPokemonId ] = useState()
-  const [ loading, setLoading ] = useState(false)
-  const [ error, setError ] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
+    dispatch(setLoadingCards(true))
     fetch(pokemon.url)
       .then(res => res.json())
       .then(pokemonData => {
+        console.log(pokemonData)
         setPokemonImg(pokemonData.sprites.other['official-artwork'].front_default)
         setPokemonId(pokemonData.id)
       })
       .catch(err => {
         console.log(err)
-        setError(err)
+        dispatch(setError(err))
       })
       .finally(_ => {
-        setLoading(false)
+        dispatch(setLoadingCards(false))
       })
-  }, [pokemon.url])
+  }, [pokemon.url, dispatch])
 
   const cardImage = {
     width: '150px',
@@ -46,7 +48,7 @@ function CardPokemon (props) {
   }
 
   if(error) {
-    return <h1>We find some errors, here: {error}</h1>
+    return <h1>We find some errors, here: {JSON.stringify(error)}</h1>
   }
 
   function loadingPict () {
@@ -69,9 +71,9 @@ function CardPokemon (props) {
     if (flag) dispatch(addToFavorites(payload))
   }
 
-  function changesPage(e, id) {
+  function changesPage(e, payload) {
     e.preventDefault()
-    history.push(`/details/${id}`)
+    history.push(`/details/${payload.pokemonId}`)
   }
 
   return (
@@ -82,7 +84,7 @@ function CardPokemon (props) {
         <CardBody>
           <CardTitle tag="h5" className="text-title">{pokemon.name}</CardTitle>
           <div>
-            <Button className="btn-text" onClick={(event) => changesPage(event, pokemonId)}>Details..</Button>
+            <Button className="btn-details btn-text" onClick={(event) => changesPage(event, { id: index, pokemonId })}>Details..</Button>
           </div>
         </CardBody>
       </Card>

@@ -6,7 +6,7 @@ import {
 import './Card-favorites.css'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { deleteFavorite } from '../store/action'
+import { deleteFavorite } from '../store/actions/favoritesAction'
 
 export default function Cardfavorites(props) {
   const { pokemon } = props
