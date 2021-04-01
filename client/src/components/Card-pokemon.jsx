@@ -26,7 +26,6 @@ function CardPokemon (props) {
     fetch(pokemon.url)
       .then(res => res.json())
       .then(pokemonData => {
-        console.log(pokemonData)
         setPokemonImg(pokemonData.sprites.other['official-artwork'].front_default)
         setPokemonId(pokemonData.id)
       })

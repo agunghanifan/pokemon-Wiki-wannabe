@@ -29,7 +29,6 @@ export function fetchPokemonsAsync() {
         fetch(pokemonsReducer.fetchLink)
           .then(res => res.json())
           .then(pokemonsData => {
-              console.log(pokemonsData)
               dispatch(setPokemons(pokemonsData.results))
           })
           .catch(err => {
