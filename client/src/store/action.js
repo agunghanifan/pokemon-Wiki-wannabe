@@ -13,3 +13,5 @@ export function deleteFavorite(payload) {
 export function setDetails(payload) {
     return { type: "details/setDetails", payload }
 }
+
+
